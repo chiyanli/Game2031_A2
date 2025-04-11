@@ -1054,7 +1054,7 @@ MonoBehaviour:
   groundCheckSize: {x: 0.5, y: 0.04}
   groundLayer:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 8
 --- !u!114 &617494324
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1202,7 +1202,7 @@ GameObject:
   - component: {fileID: 1328272400}
   - component: {fileID: 1328272399}
   - component: {fileID: 1328272398}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Ground
   m_TagString: Untagged
   m_Icon: {fileID: 0}

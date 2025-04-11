@@ -11,19 +11,17 @@ public class PlayerMovement : MonoBehaviour
     float horizontalMovement;
     [Header("Jumping")]
     public float jumpPower = 10f;
+    public int maxJumps = 2;
+    int jumpsRemaining;
     [Header("GroundCheck")]
     public Transform groundCheckPos;
     public Vector2 groundCheckSize = new Vector2(0.5f, 0.05f);
     public LayerMask groundLayer;
 
-    void Start()
-    {
-        
-    }
-
     void Update()
     {
         rb.velocity = new Vector2(horizontalMovement * moveSpeed, rb.velocity.y);
+        GroundCheck();
     }
 
     public void Move(InputAction.CallbackContext context)
@@ -33,28 +31,29 @@ public class PlayerMovement : MonoBehaviour
 
     public void Jump(InputAction.CallbackContext context)
     {
-        if(isGrounded())
+        if(jumpsRemaining > 0)
         {
             if (context.performed)
             {
                 // Hold down jump button = full height
                 rb.velocity = new Vector2(rb.velocity.x, jumpPower);
+                jumpsRemaining--;
             }
             else if (context.canceled)
             {
                 // Light tap of jump = half the height
                 rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y * 0.5f);
+                jumpsRemaining--;
             }
         }
     }
 
-    private bool isGrounded()
+    private void GroundCheck()
     {
         if(Physics2D.OverlapBox(groundCheckPos.position, groundCheckSize, 0, groundLayer))
         {
-            return true;
+           jumpsRemaining = maxJumps;
         }
-        return false;
     }
 
     private void OnDrawGizmosSelected()
