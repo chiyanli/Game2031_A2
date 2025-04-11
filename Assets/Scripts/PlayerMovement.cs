@@ -84,40 +84,41 @@ public class PlayerMovement : MonoBehaviour
 
     public void Jump(InputAction.CallbackContext context)
     {
-        if(jumpsRemaining > 0)
+        if (jumpsRemaining > 0)
         {
             if (context.performed)
             {
-                // Hold down jump button = full height
                 rb.velocity = new Vector2(rb.velocity.x, jumpPower);
                 jumpsRemaining--;
+
+                AudioManager.Instance?.PlayJumpSound(); // Play sound here
             }
             else if (context.canceled)
             {
-                // Light tap of jump = half the height
                 rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y * 0.5f);
-                jumpsRemaining--;
+                jumpsRemaining--;               
             }
         }
 
-        // wall jump
         if (context.performed && wallJumpTimer > 0f)
         {
             isWallJumping = true;
-            rb.velocity = new Vector2(wallJumpDirection * wallJumpPower.x, wallJumpPower.y); //jump away from wall
+            rb.velocity = new Vector2(wallJumpDirection * wallJumpPower.x, wallJumpPower.y);
             wallJumpTimer = 0;
 
-            // Force Flip
-            if(transform.localScale.x != wallJumpDirection)
+            AudioManager.Instance?.PlayJumpSound(); // Play wall jump sound
+
+            if (transform.localScale.x != wallJumpDirection)
             {
                 isFacingRight = !isFacingRight;
                 Vector3 ls = transform.localScale;
                 ls.x *= -1f;
                 transform.localScale = ls;
             }
-            Invoke(nameof(CancelWallJump), wallJumpTime + 0.1f); // wall jump = 0.5f -- jump again = 0.6f
+            Invoke(nameof(CancelWallJump), wallJumpTime + 0.1f);
         }
     }
+
 
     private void GroundCheck()
     {
